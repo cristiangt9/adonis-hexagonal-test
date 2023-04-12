@@ -24,5 +24,8 @@
       }
     ]
   },
-  "testProviders": ["@japa/preset-adonis/TestsProvider"]
+  "testProviders": ["@japa/preset-adonis/TestsProvider"],
+  "namespaces": {
+    "httpControllers": "App/Http/Controllers"
+  }
 }

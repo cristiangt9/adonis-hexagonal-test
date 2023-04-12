@@ -39,3 +39,18 @@ Server.middleware.register([() => import('@ioc:Adonis/Core/BodyParser')])
 |
 */
 Server.middleware.registerNamed({})
+
+import { ApplicationContract } from '@ioc:Adonis/Core/Application'
+import { InMemoryTaskAdapter } from 'App/Core/Adapters/InMemoryTaskAdapter'
+import { TaskService } from 'App/Services/TaskService'
+import TaskController from 'App/Http/Controllers/TaskController'
+
+export default class Kernel {
+  public static async bootstrap(app: ApplicationContract) {
+    console.log('ejecutando el boostrap')
+
+    app.container.singleton('TaskPort', () => new InMemoryTaskAdapter())
+    app.container.singleton('TaskService', (app) => new TaskService(app.use('TaskPort')))
+    app.container.singleton('TaskController', (app) => new TaskController(app.use('TaskService')))
+  }
+}
