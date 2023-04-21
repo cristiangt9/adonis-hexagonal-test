@@ -1,13 +1,25 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { InMemoryTaskAdapter } from 'App/Core/Adapters/InMemoryTaskAdapter'
+import { TaskRepository } from 'App/Core/Adapters/TaskRepository'
 import { Task } from 'App/Core/Domain/Task'
 import { TaskService } from 'App/Services/TaskService'
 
 export default class TaskController {
-  constructor(private taskService: TaskService) {}
+  private taskService: TaskService
+  constructor() {
+    const repository = new TaskRepository(new InMemoryTaskAdapter())
+    this.taskService = new TaskService(repository)
+  }
 
   public async index({ response }: HttpContextContract) {
     const tasks = await this.taskService.getAllTasks()
     return response.ok(tasks)
+  }
+
+  public async store({ request, response }: HttpContextContract) {
+    const task = request.body() as Task
+    const newTask = await this.taskService.createTask(task)
+    return response.created(newTask)
   }
 
   public async show({ params, response }: HttpContextContract) {
@@ -16,12 +28,6 @@ export default class TaskController {
       return response.notFound()
     }
     return response.ok(task)
-  }
-
-  public async store({ request, response }: HttpContextContract) {
-    const task = request.body() as Task
-    const newTask = await this.taskService.createTask(task)
-    return response.created(newTask)
   }
 
   public async update({ params, request, response }: HttpContextContract) {

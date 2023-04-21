@@ -19,21 +19,37 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
-import { InMemoryTaskAdapter } from 'App/Core/Adapters/InMemoryTaskAdapter'
-import { TaskRepository } from 'App/Core/Adapters/TaskRepository'
-import TaskController from 'App/Http/Controllers/TaskController'
-import { TaskService } from 'App/Services/TaskService'
+// import { InMemoryTaskAdapter } from 'App/Core/Adapters/InMemoryTaskAdapter'
+// import { TaskRepository } from 'App/Core/Adapters/TaskRepository'
+// import TaskController from 'App/Http/Controllers/TaskController'
+// import { TaskService } from 'App/Services/TaskService'
 
 Route.get('/', async () => {
   return { hello: 'world' }
 })
-const port = new InMemoryTaskAdapter()
-const repository = new TaskRepository(port)
-const service = new TaskService(repository)
-const Controller = new TaskController(service)
 
+// const repository = new TaskRepository(new InMemoryTaskAdapter())
+// const service = new TaskService(repository)
+// const Controller = new TaskController(service)
 
-// Route.resource('/task', 'TaskController').apiOnly()
-Route.get('/task', (httpContext) => {
-  return Controller.index(httpContext)
-})
+// Route.get('/task', (httpContext) => {
+//   return Controller.index(httpContext)
+// })
+
+// Route.post('/task', (httpContext) => {
+//   return Controller.store(httpContext)
+// })
+
+// Route.get('/task/:id', (httpContext) => {
+//   return Controller.show(httpContext)
+// })
+
+// Route.put('/task/:id', (httpContext) => {
+//   return Controller.update(httpContext)
+// })
+
+// Route.delete('/task', (httpContext) => {
+//   return Controller.destroy(httpContext)
+// })
+
+Route.resource('task', 'TaskController').apiOnly()
